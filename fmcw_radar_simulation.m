@@ -25,8 +25,8 @@ Nr=1024;
 
 
 sensors_coordinates = [0,0,0];
-target_coordinates = [5,5,0;10,5,0];
-target_velocities = [4,4,0;4,4,0];
+target_coordinates = [110,0,0;0,80,0];
+target_velocities = [20,0,0;0,40,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
 
