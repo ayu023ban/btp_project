@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-global c range max_vel max_range Nd Nr range_res B Tchirp slope fc no_of_targets
+global c range max_vel max_range Nd Nr range_res B Tchirp slope fc no_of_targets d
 
 %% chip limits
 c = 3e8;
@@ -25,26 +25,33 @@ Nr=1024;
 
 
 sensors_coordinates = [0,0,0];
+sensor_directions = [0,1,0];
 target_coordinates = [110,0,0;0,80,0];
 target_velocities = [20,0,0;0,40,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
-
+no_of_channels = 4;
+d = 2e-3;
 
 %% Calling of Functions
- res = get_range_vel_wrt_sensors(sensors_coordinates,target_coordinates,target_velocities);
+ res = get_range_vel_wrt_sensors(sensors_coordinates,target_coordinates,target_velocities,sensor_directions);
 
  for sensor =1:no_of_sensors
      range_vector = res(sensor,:,1);
      vel_vector = res(sensor,:,2);
-     Mix = baseband_signal_generation(range_vector, vel_vector); 
-     RDM = range_doppler_response(Mix);
-     visualize_fmcw_radar_baseband_signals(RDM)
+     theta_vector = res(sensor,:,3);
+     t = linspace(0,Nd*Tchirp,Nr*Nd);
+     Mix = zeros(no_of_channels,length(t));
+     for channel_index = 1:no_of_channels
+         Mix(channel_index,:) = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index); 
+         RDM = range_doppler_response(Mix(channel_index,:));
+         visualize_fmcw_radar_baseband_signals(RDM)
+     end
  end
 
 %% Baseband Signal Generation
-function Mix = baseband_signal_generation(range_vector, vel_vector)
-global c range Nd Nr Tchirp slope fc no_of_targets
+function Mix = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index)
+global c range Nd Nr Tchirp slope fc no_of_targets d
 % Timestamp for running the displacement scenario for every sample on each
 % chirp
 t=linspace(0,Nd*Tchirp,Nr*Nd); %total time for samples
@@ -66,14 +73,16 @@ weights = weights/sum(weights);
 for target_index= 1:no_of_targets
     range = range_vector(target_index);
     vel = vel_vector(target_index);
+    theta = theta_vector(target_index);
     weight = weights(target_index);
-
+    channel_index*d*sin(theta)
     for i=1:length(t)         
       r_t(i) = range + (vel*t(i));
       td(i) = (2 * r_t(i)) / c;
+      new_time = t(i)-td(i);
     
       Tx(i)   = cos(2*pi*(fc*t(i) + (slope*t(i)^2)/2 ) );
-      Rx(i)   = cos(2*pi*(fc*(t(i) -td(i)) + (slope * (t(i)-td(i))^2)/2 ) );
+      Rx(i)   = cos(2*pi*(fc*(new_time) + (slope * (new_time)^2)/2 ) );
         
       Mix(i) = Mix(i) + weight .* Tx(i) .* Rx(i);
     end
