@@ -33,6 +33,7 @@ no_of_targets = size(target_coordinates,1);
 
 %% Calling of Functions
  res = get_range_vel_wrt_sensors(sensors_coordinates,target_coordinates,target_velocities);
+
  for sensor =1:no_of_sensors
      range_vector = res(sensor,:,1);
      vel_vector = res(sensor,:,2);
@@ -74,7 +75,7 @@ for target_index= 1:no_of_targets
       Tx(i)   = cos(2*pi*(fc*t(i) + (slope*t(i)^2)/2 ) );
       Rx(i)   = cos(2*pi*(fc*(t(i) -td(i)) + (slope * (t(i)-td(i))^2)/2 ) );
         
-      Mix(i) = Mix(i) + Tx(i) .* Rx(i);
+      Mix(i) = Mix(i) + weight .* Tx(i) .* Rx(i);
     end
 end
 end
