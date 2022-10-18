@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-global c range max_vel max_range Nd Nr range_res B Tchirp slope fc no_of_targets d
+global c max_vel max_range Nd Nr range_res B Tchirp slope fc no_of_targets d no_of_channels
 
 %% chip limits
 c = 3e8;
@@ -30,7 +30,7 @@ target_coordinates = [110,0,0;0,80,0];
 target_velocities = [20,0,0;0,40,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
-no_of_channels = 4;
+no_of_channels = 10;
 d = 2e-3;
 
 %% Calling of Functions
@@ -42,16 +42,20 @@ d = 2e-3;
      theta_vector = res(sensor,:,3);
      t = linspace(0,Nd*Tchirp,Nr*Nd);
      Mix = zeros(no_of_channels,length(t));
-     for channel_index = 1:1
+     for channel_index = 1:no_of_channels
          Mix(channel_index,:) = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index); 
-         RDM = range_doppler_response(Mix(channel_index,:));
-         visualize_fmcw_radar_baseband_signals(RDM)
+          RDM = range_doppler_response(Mix(channel_index,:));
+          visualize_fmcw_radar_baseband_signals(RDM)
      end
+%      RDTM = range_doppler_theta_response(Mix);
+%      for channel_index = 1:10
+%          visualize_fmcw_radar_baseband_signals(RDTM(:,:,channel_index));
+%      end
  end
 
 %% Baseband Signal Generation
 function Mix = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index)
-global c range Nd Nr Tchirp slope fc no_of_targets temp
+global c range Nd Nr Tchirp slope fc no_of_targets temp d
 % Timestamp for running the displacement scenario for every sample on each
 % chirp
 t=linspace(0,Nd*Tchirp,Nr*Nd); %total time for samples
@@ -76,7 +80,7 @@ for target_index= 1:no_of_targets
     theta = theta_vector(target_index);
     weight = weights(target_index);
     for i=1:length(t)         
-      r_t(i) = range + (vel*t(i));
+      r_t(i) = range + (vel*t(i)) + (channel_index-1)*d*sin(theta);
       td(i) = (2 * r_t(i)) / c;
       new_time = t(i)-td(i);
 
@@ -88,6 +92,21 @@ for target_index= 1:no_of_targets
     end
 end
 end
+
+
+%% 3D- Range Doppler Theta Response
+function RDTM = range_doppler_theta_response(Mix)
+global Nd Nr no_of_channels
+a = zeros(Nr,Nd,no_of_channels);
+for channel_index = 1:no_of_channels
+    a(:,:,channel_index) = reshape(Mix(channel_index,:),[Nr,Nd]);
+end
+signal_fft3 = fftn(a);
+signal_fft3 = fftshift (signal_fft3);
+
+RDTM = abs(signal_fft3);
+end
+
 
 %% RANGE DOPPLER RESPONSE
 function RDM = range_doppler_response(Mix)
