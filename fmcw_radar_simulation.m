@@ -42,7 +42,7 @@ d = 2e-3;
      theta_vector = res(sensor,:,3);
      t = linspace(0,Nd*Tchirp,Nr*Nd);
      Mix = zeros(no_of_channels,length(t));
-     for channel_index = 1:no_of_channels
+     for channel_index = 1:1
          Mix(channel_index,:) = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index); 
          RDM = range_doppler_response(Mix(channel_index,:));
          visualize_fmcw_radar_baseband_signals(RDM)
@@ -51,7 +51,7 @@ d = 2e-3;
 
 %% Baseband Signal Generation
 function Mix = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index)
-global c range Nd Nr Tchirp slope fc no_of_targets d
+global c range Nd Nr Tchirp slope fc no_of_targets temp
 % Timestamp for running the displacement scenario for every sample on each
 % chirp
 t=linspace(0,Nd*Tchirp,Nr*Nd); %total time for samples
@@ -75,16 +75,16 @@ for target_index= 1:no_of_targets
     vel = vel_vector(target_index);
     theta = theta_vector(target_index);
     weight = weights(target_index);
-    channel_index*d*sin(theta)
     for i=1:length(t)         
       r_t(i) = range + (vel*t(i));
       td(i) = (2 * r_t(i)) / c;
       new_time = t(i)-td(i);
-    
-      Tx(i)   = cos(2*pi*(fc*t(i) + (slope*t(i)^2)/2 ) );
-      Rx(i)   = cos(2*pi*(fc*(new_time) + (slope * (new_time)^2)/2 ) );
-        
-      Mix(i) = Mix(i) + weight .* Tx(i) .* Rx(i);
+
+      Tx(i) = 2*pi*(fc*t(i) + (slope*t(i)^2)/2 );
+      Rx(i) = 2*pi*(fc*(new_time) + (slope * (new_time)^2)/2 ) ;
+      temp = Tx(i)-Rx(i);
+
+      Mix(i) = Mix(i) + weight .* complex(cos(temp),sin(temp));
     end
 end
 end
@@ -97,7 +97,6 @@ Mix=reshape(Mix,[Nr,Nd]);
 signal_fft2 = fft2(Mix,Nr,Nd);
 
 % Taking just one side of signal from Range dimension.
-signal_fft2 = signal_fft2(1:Nr/2,1:Nd);
 signal_fft2 = fftshift (signal_fft2);
 
 RDM = abs(signal_fft2);
@@ -108,7 +107,7 @@ end
 function visualize_fmcw_radar_baseband_signals(RDM)
 global max_vel Nd Nr max_range 
 doppler_axis = linspace(-max_vel,max_vel,Nd);
-range_axis = linspace(-max_range,max_range,Nr/2)*((Nr/2)/(max_range*2));
+range_axis = linspace(-max_range,max_range,Nr)*((Nr/2)/(max_range));
 
 figure,surf(doppler_axis,range_axis,RDM);
 title('Amplitude and Range From FFT2');
