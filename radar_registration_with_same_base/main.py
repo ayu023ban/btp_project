@@ -41,13 +41,26 @@ class CNNModel(nn.Module):
 
         return out
 
+
+class WholeNetwork(nn.Module):
+    def __init__(self,no_of_sensors):
+        self.neural_networks = [CNNModel() for x in range(no_of_sensors)]
+        self.no_of_sensors = no_of_sensors
+    
+    def forward(self,sensor_data):
+        out = []
+        for index in range(self.no_of_sensors):
+            res = self.neural_networks[index].forward(sensor_data[index])
+            out.append(res)
+        return out
+    
 #Definition of hyperparameters
 n_iters = 4500
 num_epochs = n_iters / (len(train_x) / batch_size)
 num_epochs = int(num_epochs)
 
 # Create CNN
-model = CNNModel()
+model = WholeNetwork(5)
 #model.cuda()
 print(model)
 
@@ -57,3 +70,17 @@ error = nn.CrossEntropyLoss()
 # SGD Optimizer
 learning_rate = 0.001
 optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+data = []
+
+def error(outputs):
+    pass
+
+for sensor_data in data:
+    optimizer.zero_grad()
+    outputs = model(sensor_data)
+    loss = error(outputs)
+    # Calculating gradients
+    loss.backward()
+    # Update parameters
+    optimizer.step()
+    
