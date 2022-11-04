@@ -2,7 +2,6 @@
 % Output is 3d array in which 1st index denotes sensor, second index denote
 % target and 3rd index have 2 elements- first range and second velocity
 function output = get_range_vel_wrt_sensors(sensors_coordinates, target_coordinates, target_velocities,sensor_directions)
-% global no_of_sensors no_of_targets
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
 output = zeros(no_of_sensors,no_of_targets,3);
