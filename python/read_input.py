@@ -1,2 +1,5 @@
 import scipy.io
-mat = scipy.io.loadmat('/Users/ayushbansal/dev/btp/matlab/output.mat')
+import os.path
+f = os.path.dirname(__file__)+ '/../dataset/output.mat'
+path = os.path.realpath(f)
+mat = scipy.io.loadmat(path)

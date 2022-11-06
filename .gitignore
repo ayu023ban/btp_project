@@ -1,5 +1,4 @@
 venv
-output/*
-dataset/*
 **/*.asv
 matlab/.DS_Store
+.DS_Store
