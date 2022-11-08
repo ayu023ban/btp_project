@@ -9,10 +9,10 @@ class CNNModel(nn.Module):
     def __init__(self):
         super(CNNModel, self).__init__()
 
-        self.conv_layer1 = self._conv_layer_set(1, 32)
-        self.conv_layer2 = self._conv_layer_set(32, 64)
-        self.fc1 = nn.Linear(2**3*64, 128)
-        self.fc2 = nn.Linear(128, 5)
+        self.conv_layer1 = self._conv_layer_set(2, 2)
+        self.conv_layer2 = self._conv_layer_set(2, 2)
+        # self.fc1 = nn.Linear(2**3*64, 128)
+        # self.fc2 = nn.Linear(128, 5)
         self.relu = nn.LeakyReLU()
         self.batch = nn.BatchNorm1d(128)
         self.drop = nn.Dropout(p=0.15)
@@ -29,11 +29,11 @@ class CNNModel(nn.Module):
         # Set 1
         out = self.conv_layer1(x)
         out = self.conv_layer2(out)
-        out = out.view(out.size(0), -1)
-        out = self.fc1(out)
-        out = self.relu(out)
-        out = self.batch(out)
-        out = self.drop(out)
-        out = self.fc2(out)
+        # out = out.view(out.size(0), -1)
+        # out = self.fc1(out)
+        # out = self.relu(out)
+        # out = self.batch(out)
+        # out = self.drop(out)
+        # out = self.fc2(out)
 
         return out
