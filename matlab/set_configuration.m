@@ -37,7 +37,7 @@ target_coordinates = [50,0,0;10,20,0];
 target_velocities = [40,0,0;10,0,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
-no_of_channels = 4;
+no_of_channels = 10;
 d = 2e-3;
 
 end

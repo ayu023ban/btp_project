@@ -5,7 +5,7 @@ clc;
 global c max_vel max_range Nd Nr range_res B Tchirp slope fc 
 global no_of_targets d no_of_channels snr_db TRRI vel_res 
 global sensors_coordinates sensor_directions target_coordinates target_velocities no_of_sensors
-
+tic;
 set_configuration()
 
 % %% Calling of Functions
@@ -28,3 +28,4 @@ set_configuration()
 %  end
 output = generate_simulated_data();
 save_output(output,"output.mat");
+toc
