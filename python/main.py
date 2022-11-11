@@ -34,8 +34,11 @@ x_data = torch.from_numpy(data)
 def get_loss(outputs):
     matrix = []
     for x in outputs:
-        y = torch.reshape(x,(2,-1,))
-        y = torch.norm(y,p=2,dim=0)
+        z = torch.complex(x[0],x[1])
+        z = torch.fft.fftn(z)
+        z = torch.fft.fftshift(z)
+        z = z.abs()
+        y = torch.reshape(x,(-1,))
         matrix.append(y)
     matrix = torch.stack(matrix)
     a = torch.norm(matrix,p=2,dim=0)
@@ -43,7 +46,7 @@ def get_loss(outputs):
     return a
 
 
-for sensor_data in x_data[:len(x_data)//10]:
+for sensor_data in x_data[:len(x_data)//100]:
     optimizer.zero_grad()
     outputs = model.forward(sensor_data.float())
     loss = get_loss(outputs)
