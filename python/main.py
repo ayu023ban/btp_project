@@ -17,21 +17,12 @@ n_iters = 4500
 # num_epochs = n_iters / (len(train_x) / batch_size)
 # num_epochs = int(num_epochs)
 
-# Create CNN
 model = WholeNetwork(2).to(device)
-# model.cuda()
-# print(model)
 
-# Cross Entropy Loss
-error = nn.CrossEntropyLoss()
-
-# SGD Optimizer
+# Adam Optimizer
 learning_rate = 0.01
 # print(model.parameters)
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
-data = get_dataset()
-data = data['data']
-x_data = torch.from_numpy(data)
 
 def get_loss(outputs):
     matrix = []
@@ -50,6 +41,11 @@ def get_loss(outputs):
 weight = model.get_weight_energy()
 weight_energy_values = []
 loss_values = []
+
+data = get_dataset()
+data = data['data']
+x_data = torch.from_numpy(data)
+
 for sensor_data in x_data[:len(x_data)]:
     initial_weight = model.get_weight_energy().item()
     optimizer.zero_grad()
