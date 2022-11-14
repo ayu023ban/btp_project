@@ -17,3 +17,9 @@ class WholeNetwork(nn.Module):
             res = self.neural_networks[index].forward(sensor_data[index])
             out.append(res)
         return out
+    
+    def get_weight_energy(self):
+        x = 0
+        for params in self.parameters():
+            x += torch.norm(params,p=2)
+        return x

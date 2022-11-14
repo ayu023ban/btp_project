@@ -6,6 +6,7 @@ from torchvision import datasets, transforms
 from CNNModel import CNNModel
 from read_input import get_dataset
 from WholeNetwork import WholeNetwork
+import matplotlib.pyplot as plt
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
@@ -17,7 +18,7 @@ n_iters = 4500
 # num_epochs = int(num_epochs)
 
 # Create CNN
-model = WholeNetwork(2)
+model = WholeNetwork(2).to(device)
 # model.cuda()
 # print(model)
 
@@ -25,8 +26,9 @@ model = WholeNetwork(2)
 error = nn.CrossEntropyLoss()
 
 # SGD Optimizer
-learning_rate = 0.001
-optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)
+learning_rate = 0.01
+# print(model.parameters)
+optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 data = get_dataset()
 data = data['data']
 x_data = torch.from_numpy(data)
@@ -45,12 +47,21 @@ def get_loss(outputs):
     a = torch.norm(a,p=1)
     return a
 
-
-for sensor_data in x_data[:len(x_data)//100]:
+weight = model.get_weight_energy()
+weight_energy_values = []
+loss_values = []
+for sensor_data in x_data[:len(x_data)]:
+    initial_weight = model.get_weight_energy().item()
     optimizer.zero_grad()
     outputs = model.forward(sensor_data.float())
     loss = get_loss(outputs)
-    # Calculating gradients
     loss.backward()
-    # Update parameters
     optimizer.step()
+    final_weight = model.get_weight_energy().item()
+    weight_energy_values.append(abs(final_weight-initial_weight))
+    loss_values.append(loss.item())
+
+plt.plot(loss_values)
+plt.show()
+plt.plot(weight_energy_values)
+plt.show()
