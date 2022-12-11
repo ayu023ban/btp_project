@@ -23,21 +23,21 @@ fc= 77e9;             %carrier freq
 Nd=128;
 
 %The number of samples on each chirp. 
-Nr=256;
+Nr=512;
 
 vel_res = c/(2*fc*TRRI*Nd);
 max_vel = Nd/(2*vel_res);
 
-snr_db = -9;
+snr_db = 10;
 
 
 sensors_coordinates = [0,0,0;3,0,0;4,0,0];
 sensor_directions = [0,1,0;0,1,0;0,1,0];
-target_coordinates = [50,0,0;10,20,0];
-target_velocities = [40,0,0;10,0,0];
+target_coordinates = [150,0,0;50,0,0];
+target_velocities = [40,0,0;20,0,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
-no_of_channels = 4;
+no_of_channels = 3;
 d = 2e-3;
 
 end

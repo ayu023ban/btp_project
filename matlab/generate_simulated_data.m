@@ -13,7 +13,6 @@ function output = generate_simulated_data()
     no_of_samples = 100;
     output = zeros(no_of_samples,no_of_sensors,2,Nr,Nd,no_of_channels);
     for row = 1:no_of_samples
-        set_random_target()
         for sensor =1:no_of_sensors
             range_vector = res(sensor,:,1);
             vel_vector = res(sensor,:,2);
@@ -26,5 +25,6 @@ function output = generate_simulated_data()
                 output(row,sensor,2,:,:,channel_index) = reshape(imag(Mix(channel_index,:)),[Nr,Nd]);
             end
         end
+        set_random_target()
     end
 end

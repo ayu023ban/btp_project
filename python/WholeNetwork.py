@@ -4,7 +4,7 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from CNNModel import CNNModel
-
+import copy
 
 class WholeNetwork(nn.Module):
     def __init__(self, no_of_sensors):
@@ -18,7 +18,7 @@ class WholeNetwork(nn.Module):
         for index, l in enumerate(self.neural_networks):
             res = self.neural_networks[index].forward(sensor_data[index])
             out.append(res)
-        # out.append(sensor_data[self.no_of_sensors-1])
+        out.append(sensor_data[self.no_of_sensors-1])
         return out
 
     def get_weight_energy(self):
@@ -31,4 +31,5 @@ class WholeNetwork(nn.Module):
         x = []
         for param in self.parameters():
             x.append(param.detach().clone())
-        return x
+        y = copy.deepcopy(x)
+        return y    

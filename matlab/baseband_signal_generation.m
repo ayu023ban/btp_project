@@ -41,7 +41,7 @@ for target_index= 1:no_of_targets
     end
 end
 % Adding AWGN Noise
-Mix = Mix + randn(1,length(t))*sqrt(noise_pow);
+Mix = Mix + complex(randn(1,length(t))*sqrt(noise_pow/2),randn(1,length(t))*sqrt(noise_pow/2));
 end
 
 
