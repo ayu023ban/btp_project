@@ -10,7 +10,7 @@ class WholeNetwork(nn.Module):
     def __init__(self, no_of_sensors):
         super(WholeNetwork, self).__init__()
         self.neural_networks = nn.ModuleList(
-            [CNNModel() for x in range(no_of_sensors)])
+            [CNNModel() for x in range(no_of_sensors-1)])
         self.no_of_sensors = no_of_sensors
 
     def forward(self, sensor_data):
@@ -32,4 +32,4 @@ class WholeNetwork(nn.Module):
         for param in self.parameters():
             x.append(param.detach().clone())
         y = copy.deepcopy(x)
-        return y    
+        return y
