@@ -4,13 +4,15 @@ from torch import nn
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 from CNNModel import CNNModel
+from FeedForwardModel import FeedForwardModel
 import copy
 
+
 class WholeNetwork(nn.Module):
-    def __init__(self, no_of_sensors):
+    def __init__(self, no_of_sensors, input_size):
         super(WholeNetwork, self).__init__()
         self.neural_networks = nn.ModuleList(
-            [CNNModel() for x in range(no_of_sensors-1)])
+            [FeedForwardModel(input_size) for x in range(no_of_sensors-1)])
         self.no_of_sensors = no_of_sensors
 
     def forward(self, sensor_data):
@@ -18,7 +20,9 @@ class WholeNetwork(nn.Module):
         for index, l in enumerate(self.neural_networks):
             res = self.neural_networks[index].forward(sensor_data[index])
             out.append(res)
-        out.append(sensor_data[self.no_of_sensors-1])
+        x = sensor_data[self.no_of_sensors-1]
+        y = torch.complex(x[0], x[1])
+        out.append(y)
         return out
 
     def get_weight_energy(self):

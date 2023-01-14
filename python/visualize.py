@@ -5,10 +5,13 @@ import numpy as np
 from matplotlib import cm
 from read_input import get_dataset
 from configuration import max_range, max_vel, Nr, Nd, no_of_sensors
+import signal
+
+signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 
-def mango(sensor, channel, ax):
-    Z = get_3dfft(sensor)
+def mango(sensor, channel, ax, complex=False):
+    Z = get_3dfft(sensor, complex=complex)
     Z = Z[:, :, channel].detach()
     nx, ny = Z.shape[0], Z.shape[1]
     x = np.arange(-max_vel, max_vel, 2*max_vel/ny)
@@ -29,7 +32,7 @@ def heat_map(input, output, channel):
         output_sensor = output[index]
         fig = plt.figure(figsize=plt.figaspect(0.5))
         ax1 = fig.add_subplot(1, 2, 1, projection='3d')
-        mango(input_sensor, channel, ax1)
+        mango(input_sensor, channel, ax1, complex=True)
         ax2 = fig.add_subplot(1, 2, 2, projection='3d')
         mango(output_sensor, channel, ax2)
         fig.suptitle(f"input and output of sensor: {index+1}")

@@ -6,14 +6,18 @@ from matplotlib import pyplot as plt
 import time
 from utils import get_output_path, get_3dfft
 from visualize import heat_map
-from configuration import no_of_channels, no_of_sensors, input_data
+from configuration import no_of_channels, no_of_sensors, input_data, sensor_dimension
 
 start_time = time.time()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-no_of_epochs = 50
-model = WholeNetwork(no_of_sensors).to(device)
+no_of_epochs = 10
+model = WholeNetwork(no_of_sensors, sensor_dimension).to(device)
+
+params = model.get_immutable_weights()
+for param in params:
+    print(param)
 
 # Adam Optimizer
 learning_rate = 0.01
@@ -33,7 +37,12 @@ def get_loss(outputs):
     a = torch.norm(matrix, p=2, dim=0)
     a = torch.norm(a, p=1)
     c = a+l1_bias*b
-    return c
+    weights = model.get_immutable_weights()
+    d = 0
+    no_of_params = len(weights)
+    for index in range(no_of_params):
+        d += torch.norm(weights[index], p=1)
+    return c + d
 
 
 def get_energy_of_diff_weight(initial_weights, final_weights):
@@ -46,16 +55,17 @@ def get_energy_of_diff_weight(initial_weights, final_weights):
     return x
 
 
-weight = model.get_weight_energy()
 weight_energy_values = []
 loss_values = []
 
 
 final_output = None
 inputs = None
+count = 0
 for epoch_number in range(no_of_epochs):
     for sensor_data in input_data[:len(input_data)//100]:
-        initial_weight_params = model.get_immutable_weights()
+        count += 1
+        # initial_weight_params = model.get_immutable_weights()
         optimizer.zero_grad()
         inputs = sensor_data.float()
         outputs = model.forward(sensor_data.float())
@@ -64,11 +74,12 @@ for epoch_number in range(no_of_epochs):
         loss.backward()
         optimizer.step()
         loss_values.append(loss.item())
-        final_weight_params = model.get_immutable_weights()
-        energy_difference_weight = abs(get_energy_of_diff_weight(
-            initial_weight_params, final_weight_params).item())
-        weight_energy_values.append(energy_difference_weight)
-        # print(final_weight_params[1])
+        # final_weight_params = model.get_immutable_weights()
+        # energy_difference_weight = abs(get_energy_of_diff_weight(
+        #     initial_weight_params, final_weight_params).item())
+        # weight_energy_values.append(energy_difference_weight)
+        if count % 5 == 0:
+            print(f"Iteration: {count}, loss: {loss.item()}")
 
 
 plt.plot(loss_values)
@@ -77,6 +88,7 @@ plt.clf()
 plt.plot(weight_energy_values)
 plt.savefig(get_output_path("energy_weight_difference.png"))
 plt.clf()
+plt.close()
 print(f"Time elapsed: {time.time()-start_time}")
 
 

@@ -12,11 +12,14 @@ x_data = data['output']
 input_data = torch.from_numpy(x_data)
 no_of_sensors = x_data.shape[1]
 
+t = x_data.shape
+sensor_dimension = t[3]*t[4]*t[5]
+
 manual_channels = 4
 manual_sensors = 2
 
-no_of_channels = min(no_of_channels,manual_channels)
-no_of_sensors = min(no_of_sensors,manual_sensors)
+no_of_channels = min(no_of_channels, manual_channels)
+no_of_sensors = min(no_of_sensors, manual_sensors)
 
 if (no_of_channels < manual_channels):
     print("manual channels is more than channels in data")
