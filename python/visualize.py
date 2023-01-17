@@ -1,10 +1,8 @@
 from matplotlib import pyplot as plt
 from utils import get_3dfft
-import torch
 import numpy as np
 from matplotlib import cm
-from read_input import get_dataset
-from configuration import max_range, max_vel, Nr, Nd, no_of_sensors
+from configuration import  max_vel, Nr,  no_of_sensors
 import signal
 
 signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -27,7 +25,7 @@ def mango(sensor, channel, ax, complex=False):
 
 
 def heat_map(input, output, channel):
-    for index in range(no_of_sensors):
+    for index in range(no_of_sensors-1):
         input_sensor = input[index]
         output_sensor = output[index]
         fig = plt.figure(figsize=plt.figaspect(0.5))

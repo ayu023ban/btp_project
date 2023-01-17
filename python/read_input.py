@@ -1,5 +1,8 @@
 import scipy.io
 import os.path
+import torch
+from utils import get_model_path, get_dataset_path
+
 
 # Generate Simulated Data of Sensors
 # Output is 6D data with following information:
@@ -10,7 +13,6 @@ import os.path
 # 5th Index: chirps in one sequence
 # 6th Index: Channel Index
 def get_dataset():    
-    f = os.path.dirname(__file__)+ '/../dataset/output.mat'
-    path = os.path.realpath(f)
+    path = get_dataset_path('output.mat')
     mat = scipy.io.loadmat(path)
     return mat

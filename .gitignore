@@ -3,3 +3,4 @@ venv
 matlab/.DS_Store
 .DS_Store
 *.pyc
+python/model.pt
