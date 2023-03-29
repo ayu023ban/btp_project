@@ -33,6 +33,8 @@ set_configuration()
 %         visualize_fmcw_radar_baseband_signals(RDTM(:,:,channel_index));
 %      end
 %  end
-output = generate_simulated_data();
-save_output(output,"output.mat");
+%output = generate_simulated_data();
+%save_output(output,"output.mat");
+input = generate_simulated_input();
+net = load_pytorch_model(input);
 toc

@@ -1,6 +1,6 @@
 function save_output(output,file_name)
     global max_vel max_range Nr Nd no_of_channels
-    mydir  = pwd
+    mydir  = pwd;
     idcs   = strfind(mydir,'\');
     newdir = mydir(1:idcs(end)-1);
     Folder = fullfile(newdir,'dataset',file_name);

@@ -12,7 +12,7 @@ from utils import get_model_path, get_dataset_path
 # 4rd Index: Number of samples in one chirp
 # 5th Index: chirps in one sequence
 # 6th Index: Channel Index
-def get_dataset():    
-    path = get_dataset_path('output.mat')
+def get_dataset(file_name):    
+    path = get_dataset_path(file_name)
     mat = scipy.io.loadmat(path)
     return mat

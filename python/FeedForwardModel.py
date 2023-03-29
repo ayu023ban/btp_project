@@ -6,11 +6,11 @@ class FeedForwardModel(nn.Module):
     def __init__(self, input_size):
         super(FeedForwardModel, self).__init__()
 
-        self.fc_layer1 = self._fc_layer_set(input_size, 100)
-        self.fc_layer2 = self._fc_layer_set(100,100)
-        self.fc_layer3 = self._fc_layer_set(100,100)
-        self.fc_layer4 = self._fc_layer_set(100,100)
-        self.fc_layer5 = self._fc_layer_set(100,input_size)
+        self.fc_layer1 = self._fc_layer_set(input_size, 50)
+        self.fc_layer2 = self._fc_layer_set(50,50)
+        # self.fc_layer3 = self._fc_layer_set(50,50)
+        # self.fc_layer4 = self._fc_layer_set(50,50)
+        self.fc_layer5 = self._fc_layer_set(50,input_size)
         # self.net = nn.Sequential(
         #     nn.Linear(input_size, 100).to(torch.cfloat),
         #     nn.Linear(100, 100).to(torch.cfloat),
@@ -26,10 +26,10 @@ class FeedForwardModel(nn.Module):
         out = self.phase_amplitude_relu(out)
         out = self.fc_layer2(out)
         out = self.phase_amplitude_relu(out)
-        out = self.fc_layer3(out)
-        out = self.phase_amplitude_relu(out)
-        out = self.fc_layer4(out)
-        out = self.phase_amplitude_relu(out) 
+        # out = self.fc_layer3(out)
+        # out = self.phase_amplitude_relu(out)
+        # out = self.fc_layer4(out)
+        # out = self.phase_amplitude_relu(out) 
         out = self.fc_layer5(out)
         out = self.phase_amplitude_relu(out)
         return out
@@ -64,6 +64,7 @@ class FeedForwardModel(nn.Module):
         y = torch.flatten(y)
         z = y.cfloat()
         out = self.net(z)
-        unflatten = nn.Unflatten(0, b)
-        out = unflatten(out)
+        out = out.view(b)
+        # unflatten = nn.Unflatten(0, b)
+        # out = unflatten(out)
         return out

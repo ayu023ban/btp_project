@@ -8,7 +8,7 @@ def get_output_path(filename):
     return path
 
 def get_model_path():
-    f = os.path.dirname(__file__)+ './model.pt'
+    f = os.path.dirname(__file__)+ '/model.pt'
     path = os.path.realpath(f)
     return path
 
@@ -21,7 +21,7 @@ def get_3dfft(x, complex=False):
     z = x
     if (complex):
         z = torch.complex(x[0], x[1])
-    z = torch.fft.fftn(z)
+    z = torch.fft.fftn(z,norm="ortho")
     z = torch.fft.fftshift(z)
     z = z.abs()
     return z
@@ -32,14 +32,15 @@ def get_loss(outputs):
     b = 0
     for x in outputs:
         z = get_3dfft(x)
+        # z = x
         y = torch.reshape(z, (-1,))
-        # b += torch.norm(y, p=1)
+        b += torch.norm(y, p=1)
         matrix.append(y)
     matrix = torch.stack(matrix)
     a = torch.norm(matrix, p=2, dim=0)
     a = torch.norm(a, p=1)
-    # c = a+l1_bias*b
-    return a
+    c = a+l1_bias*b
+    return c
 
 
 def get_energy_of_diff_weight(initial_weights, final_weights):

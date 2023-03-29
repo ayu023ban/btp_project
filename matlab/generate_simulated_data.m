@@ -13,18 +13,6 @@ function output = generate_simulated_data()
     no_of_samples = 100;
     output = zeros(no_of_samples,no_of_sensors,2,Nr,Nd,no_of_channels);
     for row = 1:no_of_samples
-        for sensor =1:no_of_sensors
-            range_vector = res(sensor,:,1);
-            vel_vector = res(sensor,:,2);
-            theta_vector = res(sensor,:,3);
-            t = linspace(0,Nd*Tchirp,Nr*Nd);
-            Mix = zeros(no_of_channels,length(t));
-            for channel_index = 1:no_of_channels
-                Mix(channel_index,:) = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index);
-                output(row,sensor,1,:,:,channel_index) = reshape(real(Mix(channel_index,:)),[Nr,Nd]);
-                output(row,sensor,2,:,:,channel_index) = reshape(imag(Mix(channel_index,:)),[Nr,Nd]);
-            end
-        end
-        set_random_target()
+        output(row,:,:,:,:,:) = generate_simulated_input(); 
     end
 end

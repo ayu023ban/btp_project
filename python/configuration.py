@@ -2,7 +2,7 @@ import torch
 from read_input import get_dataset
 
 
-data = get_dataset()
+data = get_dataset('output.mat')
 max_vel = data['max_vel']
 max_range = data['max_range']
 Nr = data['Nr']
