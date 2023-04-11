@@ -7,26 +7,32 @@ def get_output_path(filename):
     path = os.path.realpath(f)
     return path
 
+
 def get_model_path():
-    f = os.path.dirname(__file__)+ '/model.pt'
+    f = os.path.dirname(__file__) + '/model.pt'
     path = os.path.realpath(f)
     return path
 
+
 def get_dataset_path(filename):
-    f = os.path.dirname(__file__)+ f'/../dataset/{filename}'
+    f = os.path.dirname(__file__) + f'/../dataset/{filename}'
     path = os.path.realpath(f)
     return path
+
 
 def get_3dfft(x, complex=False):
     z = x
     if (complex):
         z = torch.complex(x[0], x[1])
-    z = torch.fft.fftn(z,norm="ortho")
+    z = torch.fft.fftn(z, norm="ortho")
     z = torch.fft.fftshift(z)
     z = z.abs()
     return z
 
+
 l1_bias = 0
+
+
 def get_loss(outputs):
     matrix = []
     b = 0
@@ -53,7 +59,7 @@ def get_energy_of_diff_weight(initial_weights, final_weights):
     return x
 
 
-def load_model(model,optimizer):
+def load_model(model, optimizer):
     path = get_model_path()
     if not os.path.exists(path):
         print("Model file not found so not able to load model")
@@ -61,3 +67,11 @@ def load_model(model,optimizer):
     checkpoint = torch.load(path)
     model.load_state_dict(checkpoint['model_state_dict'])
     optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+
+
+def save_model(model, optimizer):
+    path = get_model_path()
+    torch.save({
+        'model_state_dict': model.state_dict(),
+        'optimizer_state_dict': optimizer.state_dict(),
+    }, path)
