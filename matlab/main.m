@@ -37,8 +37,5 @@ set_configuration()
 %save_output(output,"output.mat");
 input = generate_simulated_input();
 net = load_pytorch_model(input);
-temp = size(net);
-temp = temp(2:4);
-first_sensor_output = reshape(net(1,:,:,:),temp);
-visualize_output(first_sensor_output);
+visualize_output(net);
 toc

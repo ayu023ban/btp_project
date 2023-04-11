@@ -9,7 +9,7 @@ function net = load_pytorch_model(input)
     venv = fullfile(newdir,'venv','bin','python');
 
     % For Anaconda based environment
-    venv = '\Users\Admin\anaconda3\envs\py39\python.exe';
+    %venv = '\Users\Admin\anaconda3\envs\py39\python.exe';
     python = fullfile(newdir,'python','run_model.py');
     save(input_file,"input");
     system(venv + " "+python);

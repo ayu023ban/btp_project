@@ -4,10 +4,10 @@ from torch import nn
 from WholeNetwork import WholeNetwork
 from matplotlib import pyplot as plt
 import time
-from utils import get_output_path, get_loss, get_energy_of_diff_weight, load_model
+from utils import get_output_path, get_loss, get_energy_of_diff_weight, load_model, save_model
 from visualize import heat_map
 from configuration import no_of_sensors, input_data, sensor_dimension
-from read_input import  get_model_path
+from read_input import get_model_path
 
 start_time = time.time()
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -31,9 +31,7 @@ final_output = None
 inputs = None
 count = 0
 
-
-wei = []
-for sensor_data in input_data[1:len(input_data)//100]:
+for sensor_data in input_data[0:len(input_data)//100]:
     for epoch_number in range(no_of_epochs):
         count += 1
         initial_weight_params = model.get_immutable_weights()
@@ -42,15 +40,15 @@ for sensor_data in input_data[1:len(input_data)//100]:
         outputs = model.forward(sensor_data.float())
         final_output = outputs
         loss = get_loss(outputs)
-        # loss = 
+        # loss =
         # print(loss.grad)
         loss.backward()
-        if count%1000==0:
-            for param in model.neural_networks[0].fc_layer1.parameters():
-                print(param[10,10])
-                print(param.grad[10,10])
-                print('\n')
-                break
+        # if count % 1000 == 0:
+        #     for param in model.neural_networks[0].fc_layer1.parameters():
+        #         print(param[10, 10])
+        #         print(param.grad[10, 10])
+        #         print('\n')
+        #         break
         # print(model.neural_networks[0].fc_layer2.weight.grad[10,10])
         optimizer.step()
         # for param in model.neural_networks[0].fc_layer2.parameters():
@@ -70,18 +68,15 @@ for sensor_data in input_data[1:len(input_data)//100]:
 # plt.plot(wei)
 # plt.savefig(get_output_path("wei.png"))
 # plt.clf()
-plt.plot(loss_values)
-plt.savefig(get_output_path("loss_figure.png"))
-plt.clf()
-plt.plot(weight_energy_values)
+# plt.plot(loss_values)
+# plt.savefig(get_output_path("loss_figure.png"))
+# plt.clf()
+# plt.plot(weight_energy_values)
 # plt.savefig(get_output_path("energy_weight_difference.png"))
 # plt.clf()
 # plt.close()
 print(f"Time elapsed: {time.time()-start_time}")
-
-traced_model = torch.jit.trace(model.forward,inputs)
-torch.jit.save(traced_model,get_model_path())
-
+save_model(model, optimizer)
 inputs_cpu = inputs.cpu()
 final_output_cpu = final_output.cpu()
 
