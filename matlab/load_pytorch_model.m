@@ -1,6 +1,11 @@
 function net = load_pytorch_model(input)
     mydir  = pwd;
-    idcs   = strfind(mydir,'\');
+    idcs = 0;
+    if isunix
+        idcs   = strfind(mydir,'/');
+    else
+        idcs = strfind(mydir,'\')
+    end
     newdir = mydir(1:idcs(end)-1);
     input_file = fullfile(newdir,'dataset',"temp_input");
     output_file = fullfile(newdir,'dataset',"temp_output");
