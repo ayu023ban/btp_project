@@ -1,4 +1,12 @@
-function single_output = generate_simulated_input()
+function single_output = generate_simulated_input(is_random)
+    if nargin < 1
+        is_random = false;
+      end
+    if(is_random)
+        set_random_target()
+    else
+        set_grid_target()
+    end
     global Nd Nr Tchirp no_of_channels target_velocities no_of_sensors
     global sensors_coordinates sensor_directions target_coordinates
     res = get_range_vel_wrt_sensors(sensors_coordinates,target_coordinates,target_velocities,sensor_directions);
@@ -17,5 +25,4 @@ function single_output = generate_simulated_input()
             single_output(sensor,2,:,:,channel_index) = reshape(imag(Mix(channel_index,:)),[Nr,Nd]); 
         end
     end
-    set_random_target()
 end

@@ -35,7 +35,9 @@ set_configuration()
 %  end
 %output = generate_simulated_data();
 %save_output(output,"output.mat");
-input = generate_simulated_input();
-net = load_pytorch_model(input);
-visualize_output(net);
+for x = 1:10
+    input = generate_simulated_input();
+    % net = load_pytorch_model(input);
+    visualize_output(input);
+end
 toc
