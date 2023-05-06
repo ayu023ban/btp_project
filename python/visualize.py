@@ -30,7 +30,7 @@ def heat_map(input, output, channel):
         output_sensor = output[index]
         fig = plt.figure(figsize=plt.figaspect(0.5))
         ax1 = fig.add_subplot(1, 2, 1, projection='3d')
-        mango(input_sensor, channel, ax1, complex=True)
+        mango(input_sensor, channel, ax1, complex=False)
         ax2 = fig.add_subplot(1, 2, 2, projection='3d')
         mango(output_sensor, channel, ax2)
         fig.suptitle(f"input and output of sensor: {index+1}")

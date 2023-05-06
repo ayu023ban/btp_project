@@ -1,22 +1,22 @@
 function visualize_output(data)
 global max_vel Nd Nr max_range no_of_sensors target_coordinates no_of_channels range_res vel_res
-dims = ndims(data);
-is_input = dims==5;
-if(dims==5)
-    temp = size(data);
-    new_data = zeros(temp(1),temp(3),temp(4),temp(5));
-    for sensor = 1:no_of_sensors
-        new_data(sensor,:,:,:) = complex(data(sensor,1,:,:,:),data(sensor,2,:,:,:));
-    end
-data = new_data;
+% dims = ndims(data);
+% is_input = dims==5;
+% if(dims==5)
+%     temp = size(data);
+%     new_data = zeros(temp(1),temp(3),temp(4),temp(5));
+%     for sensor = 1:no_of_sensors
+%         new_data(sensor,:,:,:) = complex(data(sensor,1,:,:,:),data(sensor,2,:,:,:));
+%     end
+% data = new_data;
 % else
 %     temp = data(1,:,:,:);
 %     sz = size(data);
 %     last_index = sz(1);
 %     data(1,:,:,:) = data(last_index,:,:,:);
 %     data(last_index,:,:,:) = temp;
-end
-temp = size(data);
+% end
+temp = size(data)
 temp = temp(2:4);
 sensors_count = size(data);
 sensors_count = min(sensors_count(1),no_of_sensors);
@@ -68,8 +68,6 @@ for sensor = 1:sensors_count
     ylabel('Range');
     zlabel('Amplitude');
     view(2);
-    if(is_input)
-        legend('coordinates:',target_coordinates)
-    end
+    % legend('coordinates:',target_coordinates)
 end
 end

@@ -2,7 +2,7 @@ import torch
 from read_input import get_dataset
 
 
-data = get_dataset('output.mat')
+data = get_dataset('training_dataset.mat')
 max_vel = data['max_vel']
 max_range = data['max_range']
 Nr = data['Nr']
@@ -13,7 +13,7 @@ input_data = torch.from_numpy(x_data)
 no_of_sensors = x_data.shape[1]
 
 t = x_data.shape
-sensor_dimension = t[3]*t[4]*t[5]
+sensor_dimension = t[2]*t[3]*t[4]
 
 manual_channels = 4
 manual_sensors = 2

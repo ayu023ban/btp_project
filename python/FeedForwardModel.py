@@ -58,13 +58,9 @@ class FeedForwardModel(nn.Module):
         return fc_layer
 
     def forward(self, x):
-        a = x.shape
-        b = x.shape[1:4]
-        y = torch.complex(x[0], x[1])
-        y = torch.flatten(y)
+        b = x.shape
+        y = torch.flatten(x)
         z = y.cfloat()
         out = self.net(z)
         out = out.view(b)
-        # unflatten = nn.Unflatten(0, b)
-        # out = unflatten(out)
         return out

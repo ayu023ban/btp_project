@@ -2,7 +2,7 @@ function set_configuration()
 
 global c max_vel max_range Nd Nr range_res B Tchirp slope fc 
 global no_of_targets d no_of_channels snr_db TRRI vel_res 
-global sensors_coordinates sensor_directions target_coordinates target_velocities no_of_sensors grid_index grid_size
+global sensors_coordinates sensor_directions target_coordinates target_velocities no_of_sensors
 global data_collection_start_time Ts Fs
 
 %% chip limits
@@ -48,15 +48,15 @@ end
 
 snr_db = 0;
 
-grid_index = [9,0];
-grid_size = [10,10];
 
-sensors_coordinates = [0,0,0];
-sensor_directions = [0,1,0];
-target_coordinates = [150,0,0];
-target_velocities = [40,0,0];
+
+sensors_coordinates = [0,0,0;10,0,0];
+sensor_directions = [0,1,0;0,1,0];
+target_coordinates = [20,0,0];
+target_velocities = [25,0,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
+no_of_targets = 2;
 no_of_channels = 4;
 d = 2e-3;
 

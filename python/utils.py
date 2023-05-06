@@ -38,7 +38,6 @@ def get_loss(outputs):
     b = 0
     for x in outputs:
         z = get_3dfft(x)
-        # z = x
         y = torch.reshape(z, (-1,))
         b += torch.norm(y, p=1)
         matrix.append(y)

@@ -8,5 +8,5 @@ function save_output(output,file_name)
     end
     newdir = mydir(1:idcs(end)-1);
     Folder = fullfile(newdir,'dataset',file_name);
-    save(Folder,'output',"max_range","max_vel","Nd", "Nr", "no_of_channels");
+    save(Folder,'output',"max_range","max_vel","Nd", "Nr", "no_of_channels",'-v7.3');
 end

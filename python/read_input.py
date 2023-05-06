@@ -2,6 +2,7 @@ import scipy.io
 import os.path
 import torch
 from utils import get_model_path, get_dataset_path
+import mat73
 
 
 # Generate Simulated Data of Sensors
@@ -12,7 +13,7 @@ from utils import get_model_path, get_dataset_path
 # 4rd Index: Number of samples in one chirp
 # 5th Index: chirps in one sequence
 # 6th Index: Channel Index
-def get_dataset(file_name):    
+def get_dataset(file_name):
     path = get_dataset_path(file_name)
-    mat = scipy.io.loadmat(path)
+    mat = mat73.loadmat(path)
     return mat
