@@ -19,8 +19,6 @@ function single_output = generate_simulated_input(is_random)
         Mix = zeros(no_of_channels,length(t));
         for channel_index = 1:no_of_channels
             Mix(channel_index,:) = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index);
-            % output(row,sensor,1,:,:,channel_index) = reshape(real(Mix(channel_index,:)),[Nr,Nd]);
-            % output(row,sensor,2,:,:,channel_index) = reshape(imag(Mix(channel_index,:)),[Nr,Nd]);
             single_output(sensor,1,:,:,channel_index) = reshape(real(Mix(channel_index,:)),[Nr,Nd]);
             single_output(sensor,2,:,:,channel_index) = reshape(imag(Mix(channel_index,:)),[Nr,Nd]); 
         end

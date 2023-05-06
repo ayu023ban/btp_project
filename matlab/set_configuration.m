@@ -15,31 +15,36 @@ c = 3e8;
 % slope = B/Tchirp
 
 slope = 30e12;
-Tchirp = 60e-6;
-Fs = 6e6;
+Tchirp = 15e-6;
+Fs = 20e6;
 Ts = 1/Fs;
-TRRI = 65e-6;
+TRRI = 20e-6;
 B = slope*Tchirp;
-fc= 77e9;             %carrier freq
-                                                          
+fc= 77e9;             
+
+%carrier freq                                                      
 %The number of chirps in one sequence.
 Nd=32;
 
 %The number of samples on each chirp. 
 Nr=256;
 range_res = c*Tchirp/(2*B*Ts*Nr);  
-% range_res = c/(2*B);
 max_range = Nr/2*range_res;
 vel_res = c/(2*fc*TRRI*Nd);
 max_vel = vel_res*Nd/(2);
-data_collection_start_time = 2*max_range/c *5;
+data_collection_start_time = 2*max_range/c*3;
+
+
 data_collection_time = Nr*Ts;
-total_measurement_time = Nd*TRRI
+total_measurement_time = Nd*TRRI;
 
 max_t_prop = 2*max_range/c;
-max_freq = slope*max_t_prop
-max_phase_change = 2*pi*max_freq*TRRI
+max_freq = slope*max_t_prop;
+max_phase_change = 2*pi*max_freq*TRRI;
 
+if(data_collection_time > Tchirp)
+   fprintf('Error Data collection period exceeding Chirp duration time');
+end
 
 snr_db = 0;
 

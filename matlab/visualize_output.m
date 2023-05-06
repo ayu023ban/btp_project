@@ -1,7 +1,7 @@
 function visualize_output(data)
 global max_vel Nd Nr max_range no_of_sensors target_coordinates no_of_channels range_res vel_res
 dims = ndims(data);
-is_input = dims==5
+is_input = dims==5;
 if(dims==5)
     temp = size(data);
     new_data = zeros(temp(1),temp(3),temp(4),temp(5));
@@ -17,7 +17,7 @@ data = new_data;
 %     data(last_index,:,:,:) = temp;
 end
 temp = size(data);
-temp = temp(2:4)
+temp = temp(2:4);
 sensors_count = size(data);
 sensors_count = min(sensors_count(1),no_of_sensors);
 
@@ -54,10 +54,6 @@ for sensor = 1:sensors_count
 
     signal_fft3 = abs(effective3dfftout);
     signal_fft3 = signal_fft3(:,:,1);
-    % doppler_axis = linspace(-max_vel,max_vel,Nd);
-    % range_axis = linspace(-max_range,max_range,Nr);
-    % figure;
-    % s = surf(doppler_axis,range_axis,signal_fft3);
     
     range_axis = (0:Nr/2-1)*range_res;
     doppler_axis = (-Nd/2:Nd/2-1)*vel_res;
@@ -71,6 +67,7 @@ for sensor = 1:sensors_count
     xlabel('Speed');
     ylabel('Range');
     zlabel('Amplitude');
+    view(2);
     if(is_input)
         legend('coordinates:',target_coordinates)
     end
