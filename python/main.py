@@ -6,22 +6,22 @@ from matplotlib import pyplot as plt
 import time
 from utils import get_output_path, get_loss, get_energy_of_diff_weight, load_model, save_model
 from visualize import heat_map
-from configuration import no_of_sensors, input_data, sensor_dimension
+from configuration import no_of_sensors, input_data, sensor_dimension, ground_target_coordinates, ground_target_velocities
 from read_input import get_model_path
 
 start_time = time.time()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-no_of_epochs = 2
+no_of_epochs = 10
 model = WholeNetwork(no_of_sensors, sensor_dimension).to(device)
 input_data = input_data.to(device)
 
 # Adam Optimizer
-learning_rate = 0.1
+learning_rate = 0.01
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-load_model(model, optimizer)
+# load_model(model, optimizer)
 
 weight_energy_values = []
 loss_values = []
@@ -30,15 +30,21 @@ loss_values = []
 final_output = None
 inputs = None
 count = 0
-
-for sensor_data in input_data[0:len(input_data)]:
-    for epoch_number in range(no_of_epochs):
+print("input length: ", len(input_data))
+sensor_to_plot = 20
+for epoch_number in range(no_of_epochs):
+    for sensor_data in input_data[0:len(input_data)]:
         count += 1
         initial_weight_params = model.get_immutable_weights()
         optimizer.zero_grad()
-        inputs = sensor_data.cfloat()
         outputs = model.forward(sensor_data.cfloat())
-        final_output = outputs
+        if count == sensor_to_plot:
+            inputs = sensor_data.cfloat()
+            ground_truth = {
+                "position": ground_target_coordinates[sensor_to_plot-1],
+                "velocity": ground_target_velocities[sensor_to_plot-1]
+            }
+            final_output = outputs
         loss = get_loss(outputs)
         # loss =
         # print(loss.grad)
@@ -74,10 +80,10 @@ plt.clf()
 # plt.plot(weight_energy_values)
 # plt.savefig(get_output_path("energy_weight_difference.png"))
 # plt.clf()
-# plt.close()
+plt.close()
 print(f"Time elapsed: {time.time()-start_time}")
 save_model(model, optimizer)
 inputs_cpu = inputs.cpu()
 final_output_cpu = final_output.cpu()
-
-heat_map(inputs_cpu, final_output_cpu, 2)
+print(ground_truth)
+heat_map(inputs_cpu, final_output_cpu, 1)

@@ -6,31 +6,44 @@
 % 4th Index: chirps in one sequence
 % 5th Index: Channel Index
 function output = generate_grid_simulated_data()
-    global Nd Nr no_of_channels no_of_sensors target_coordinates target_velocities
-    velocity_combinations = get_velocity_combinations();
+    global Nd Nr no_of_channels no_of_sensors target_coordinates target_velocities no_of_targets
+    global ground_target_coordinates ground_target_velocities
+    % velocity_combinations = get_velocity_combinations();
     position_combinations = get_position_combinations();
-    target_coordinates = transpose(reshape(position_combinations(1,:),2,[]));
-
-    no_of_samples = length(velocity_combinations)*length(position_combinations);
+    % no_of_samples = length(velocity_combinations)*length(position_combinations);
+    no_of_samples = length(position_combinations);
     output = zeros(no_of_samples,no_of_sensors,Nr,Nd,no_of_channels);
+    ground_target_coordinates = zeros(no_of_samples,no_of_targets,3);
+    ground_target_velocities = zeros(no_of_samples,no_of_targets,3);
     row = 1;
-    for position_index = 1:length(position_combinations)
-        for velocity_index = 1:length(velocity_combinations)
+    for position_index = 1:size(position_combinations,1)
+        % for velocity_index = 1:size(velocity_combinations,1)
             target_coordinates = transpose(reshape(position_combinations(position_index,:),2,[]));
             target_coordinates(:,3) = 0;
-            target_velocities = transpose(reshape(velocity_combinations(velocity_index,:),2,[]));
-            target_velocities(:,3) = 0;
-            output(row,:,:,:,:) = generate_simulated_input(); 
+            % target_velocities = transpose(reshape(velocity_combinations(velocity_index,:),2,[]));
+            % target_velocities(:,3) = 0;
+            target_velocities = zeros(no_of_targets,3);
+            % target_velocities = [10,0,0];
+            if(row==20)
+                target_coordinates
+                x = zeros(no_of_sensors,Nr,Nd,no_of_channels);
+                output(row,:,:,:,:) = generate_simulated_input(); 
+                x(:,:,:,:) = output(row,:,:,:,:);
+                visualize_output(x);
+            end
+            % output(row,:,:,:,:) = generate_simulated_input(); 
+            ground_target_coordinates(row,:,:) = target_coordinates;
+            ground_target_velocities(row,:,:)=target_velocities;
             row = row+1;
-        end
+        % end
     end
 end
 
 function position_combinations = get_position_combinations()
     global max_range no_of_targets
-    position_grid_size = [3,3];
+    position_grid_size = [50,1];
     x_positions = (1:position_grid_size(1)-1)/position_grid_size(1)*max_range;
-    y_positions = (1:position_grid_size(2)-1)/position_grid_size(2)*max_range;
+    y_positions = (0:position_grid_size(2)-1)/position_grid_size(2)*max_range;
     positions_available = get_possible_pairs(x_positions,y_positions,max_range);
     position_combinations = choosek(positions_available,no_of_targets);
 end
@@ -38,8 +51,8 @@ end
 function velocity_combinations = get_velocity_combinations()
     global max_vel no_of_targets
     velocity_grid_size = [3,3];
-    x_velocity = (-(velocity_grid_size(1)-1):velocity_grid_size(1)-1)/velocity_grid_size(1)*max_vel;
-    y_velocity = (-(velocity_grid_size(2)-1):velocity_grid_size(2)-1)/velocity_grid_size(2)*max_vel;
+    x_velocity = (-(velocity_grid_size(1)):velocity_grid_size(1))/velocity_grid_size(1)*max_vel;
+    y_velocity = (-(velocity_grid_size(2)):velocity_grid_size(2))/velocity_grid_size(2)*max_vel;
     velocities_available = get_possible_pairs(x_velocity,y_velocity,max_vel);
     velocity_combinations = choosek(velocities_available,no_of_targets);
 end
@@ -61,5 +74,5 @@ function output =  get_possible_pairs(a,b,max_value)
     c=cat(2,A',B');
     output = reshape(c,[],2);
     norm_values = vecnorm(output,2,2);
-    output(norm_values>max_value,:) = [];
+    output(norm_values>0.9*max_value,:) = [];
 end

@@ -3,9 +3,10 @@ function single_output = generate_simulated_input()
     res = get_range_vel_wrt_sensors();
     single_output = zeros(no_of_sensors,Nr,Nd,no_of_channels);
     for sensor =1:no_of_sensors
-        range_vector = res(sensor,:,1);
+        range_vector = res(sensor,:,1)
         vel_vector = res(sensor,:,2);
         theta_vector = res(sensor,:,3);
+        % keyboard
         t = linspace(0,Nd*Tchirp,Nr*Nd);
         Mix = zeros(no_of_channels,length(t));
         for channel_index = 1:no_of_channels

@@ -8,7 +8,7 @@ class FeedForwardModel(nn.Module):
 
         self.fc_layer1 = self._fc_layer_set(input_size, 50)
         self.fc_layer2 = self._fc_layer_set(50,50)
-        # self.fc_layer3 = self._fc_layer_set(50,50)
+        self.fc_layer3 = self._fc_layer_set(50,50)
         # self.fc_layer4 = self._fc_layer_set(50,50)
         self.fc_layer5 = self._fc_layer_set(50,input_size)
         # self.net = nn.Sequential(
@@ -17,17 +17,14 @@ class FeedForwardModel(nn.Module):
         #     nn.Linear(100, input_size).to(torch.cfloat),
         #     # nn.LeakyReLU(),
         # )
-        # self.fc_layer1.apply(self._init_weights)
-        # self.fc_layer2.apply(self._init_weights)
-        # self.fc_layer3.apply(self._init_weights)
     
     def net(self,z):
         out = self.fc_layer1(z)
         out = self.phase_amplitude_relu(out)
         out = self.fc_layer2(out)
         out = self.phase_amplitude_relu(out)
-        # out = self.fc_layer3(out)
-        # out = self.phase_amplitude_relu(out)
+        out = self.fc_layer3(out)
+        out = self.phase_amplitude_relu(out)
         # out = self.fc_layer4(out)
         # out = self.phase_amplitude_relu(out) 
         out = self.fc_layer5(out)

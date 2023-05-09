@@ -1,7 +1,7 @@
 
 %% Baseband Signal Generation
 function Mix = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index)
-global c range Nd Nr Tchirp slope fc no_of_targets temp d snr_db data_collection_start_time TRRI Ts
+global c range Nd Nr Tchirp slope fc no_of_targets  d snr_db data_collection_start_time TRRI Ts
 % Timestamp for running the displacement scenario for every sample on each
 % chirp
 t = zeros(Nr*Nd,1);

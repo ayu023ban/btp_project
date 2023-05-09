@@ -53,10 +53,10 @@ snr_db = 0;
 sensors_coordinates = [0,0,0;10,0,0];
 sensor_directions = [0,1,0;0,1,0];
 target_coordinates = [20,0,0];
-target_velocities = [25,0,0];
+target_velocities = [0,0,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
-no_of_targets = 2;
+no_of_targets = 1;
 no_of_channels = 4;
 d = 2e-3;
 

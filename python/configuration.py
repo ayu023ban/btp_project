@@ -8,7 +8,11 @@ max_range = data['max_range']
 Nr = data['Nr']
 Nd = data['Nd']
 no_of_channels = data['no_of_channels']
+range_res = data['range_res']
+vel_res = data['vel_res']
 x_data = data['output']
+ground_target_coordinates = data['ground_target_coordinates']
+ground_target_velocities = data['ground_target_velocities']
 input_data = torch.from_numpy(x_data)
 no_of_sensors = x_data.shape[1]
 
