@@ -1,5 +1,6 @@
 import torch
 from read_input import get_dataset
+import numpy
 
 
 data = get_dataset('training_dataset.mat')
@@ -21,8 +22,7 @@ sensor_dimension = t[2]*t[3]*t[4]
 
 manual_channels = 4
 manual_sensors = 2
-
-no_of_channels = min(no_of_channels, manual_channels)
+no_of_channels = min(int(no_of_channels), manual_channels)
 no_of_sensors = min(no_of_sensors, manual_sensors)
 
 if (no_of_channels < manual_channels):
