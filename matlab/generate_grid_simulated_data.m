@@ -25,13 +25,13 @@ function output = generate_grid_simulated_data()
             target_velocities = zeros(no_of_targets,3);
             % target_velocities = [10,0,0];
             if(row==20)
-                target_coordinates
-                x = zeros(no_of_sensors,Nr,Nd,no_of_channels);
-                output(row,:,:,:,:) = generate_simulated_input(); 
-                x(:,:,:,:) = output(row,:,:,:,:);
-                visualize_output(x);
+                % target_coordinates
+                % x = zeros(no_of_sensors,Nr,Nd,no_of_channels);
+                % x = generate_simulated_input(); 
+                % x(:,:,:,:) = output(row,:,:,:,:);
+                % visualize_output(x);
             end
-            % output(row,:,:,:,:) = generate_simulated_input(); 
+            output(row,:,:,:,:) = generate_simulated_input(); 
             ground_target_coordinates(row,:,:) = target_coordinates;
             ground_target_velocities(row,:,:)=target_velocities;
             row = row+1;
@@ -41,7 +41,7 @@ end
 
 function position_combinations = get_position_combinations()
     global max_range no_of_targets
-    position_grid_size = [50,1];
+    position_grid_size = [10,10];
     x_positions = (1:position_grid_size(1)-1)/position_grid_size(1)*max_range;
     y_positions = (0:position_grid_size(2)-1)/position_grid_size(2)*max_range;
     positions_available = get_possible_pairs(x_positions,y_positions,max_range);

@@ -13,12 +13,12 @@ start_time = time.time()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-no_of_epochs = 10
+no_of_epochs = 5
 model = WholeNetwork(no_of_sensors, sensor_dimension).to(device)
 input_data = input_data.to(device)
 
 # Adam Optimizer
-learning_rate = 0.01
+learning_rate = 0.03
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # load_model(model, optimizer)

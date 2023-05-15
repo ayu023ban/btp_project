@@ -1,7 +1,7 @@
 
 %% Baseband Signal Generation
 function Mix = baseband_signal_generation(range_vector, vel_vector,theta_vector,channel_index)
-global c range Nd Nr Tchirp slope fc no_of_targets  d snr_db data_collection_start_time TRRI Ts
+global c Nd Nr slope fc no_of_targets  d snr_db data_collection_start_time TRRI Ts
 % Timestamp for running the displacement scenario for every sample on each
 % chirp
 t = zeros(Nr*Nd,1);
@@ -25,12 +25,12 @@ sig_pow = 1;
 noise_pow = sig_pow/snr;
 
 for target_index= 1:no_of_targets
-    range = range_vector(target_index);
+    r = range_vector(target_index);
     vel = vel_vector(target_index);
-    theta = theta_vector(target_index);
+    theta = theta_vector(target_index);    
     weight = weights(target_index);
-    r_t = range + (vel*t) + (channel_index-1)*d*sin(theta);
-    td = (2 * r_t) / c;
+    r_t = r + (vel*t);
+    td = (2 * r_t - (channel_index-1)*d*sin(theta)) / c;
     phase_tx = 2*pi*(fc*t + (slope*t.*t)/2 );
     phase_rx = 2*pi*(fc*(t-td) + (slope * (t-td).*(t-td))/2 ) ;
     phase_diff = phase_tx-phase_rx;

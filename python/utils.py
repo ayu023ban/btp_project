@@ -30,7 +30,6 @@ def get_3dfft(x, complex=False):
     z = x
     if (complex):
         z = torch.complex(x[0], x[1])
-    # z = torch.fft.fftn(z)
     Nr = z.shape[0]
     Nd = z.shape[1]
     Na = z.shape[2]

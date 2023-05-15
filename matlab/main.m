@@ -15,5 +15,5 @@ output= generate_grid_simulated_data();
 size(output,1)
 % output = generate_simulated_input();
 % visualize_output(output);
-% save_output(output,"training_dataset.mat");
+save_output(output,"training_dataset.mat");
 toc
