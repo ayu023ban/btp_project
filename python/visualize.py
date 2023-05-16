@@ -25,7 +25,7 @@ def mango(sensor, channel, ax, complex=False):
 
 
 def heat_map(input_sensors, output_sensors):
-    for index in range(no_of_sensors):
+    for index in range(no_of_sensors-1):
         input_sensor = input_sensors[index]
         output_sensor = output_sensors[index]
         fig = plt.figure(figsize=plt.figaspect(2))

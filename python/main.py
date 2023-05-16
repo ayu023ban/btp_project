@@ -13,12 +13,14 @@ start_time = time.time()
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-no_of_epochs = 5
+no_of_epochs = 2
 model = WholeNetwork(no_of_sensors, sensor_dimension).to(device)
+print(model.eval())
+
 input_data = input_data.to(device)
 
 # Adam Optimizer
-learning_rate = 0.03
+learning_rate = 0.1
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # load_model(model, optimizer)
@@ -49,13 +51,12 @@ for epoch_number in range(no_of_epochs):
         # loss =
         # print(loss.grad)
         loss.backward()
-        # if count % 1000 == 0:
+        # if count % 30 == 0:
         #     for param in model.neural_networks[0].fc_layer1.parameters():
         #         print(param[10, 10])
         #         print(param.grad[10, 10])
         #         print('\n')
         #         break
-        # print(model.neural_networks[0].fc_layer2.weight.grad[10,10])
         optimizer.step()
         # for param in model.neural_networks[0].fc_layer2.parameters():
         #     print(param[10,10])
@@ -86,4 +87,4 @@ save_model(model, optimizer)
 inputs_cpu = inputs.cpu()
 final_output_cpu = final_output.cpu()
 print(ground_truth)
-heat_map(inputs_cpu, final_output_cpu, 1)
+heat_map(inputs_cpu, final_output_cpu)

@@ -50,12 +50,12 @@ def get_3dfft(x, complex=False):
     t = torch.tensor(np.zeros([Nr, Nd, Na]), dtype=torch.cfloat)
     for channel in range(Na):
         t[:, :, channel] = torch.reshape(w[:, channel], (Nr, Nd))
-    z = t[0:Nr//2, :, :]
-    y = torch.tensor(np.zeros(z.shape), dtype=torch.cfloat)
-    y[:, 0:Nd//2, :] = z[:, Nd//2:Nd, :]
-    y[:, Nd//2:Nd, :] = z[:, 0:Nd//2, :]
-    z = y.abs()
-    return z
+    s = t[0:Nr//2, :, :]
+    q = torch.tensor(np.zeros(s.shape), dtype=torch.cfloat)
+    q[:, 0:Nd//2, :] = s[:, Nd//2:Nd, :]
+    q[:, Nd//2:Nd, :] = s[:, 0:Nd//2, :]
+    r =q.abs()
+    return r
 
 
 l1_bias = 0

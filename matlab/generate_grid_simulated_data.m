@@ -31,7 +31,8 @@ function output = generate_grid_simulated_data()
                 % x(:,:,:,:) = output(row,:,:,:,:);
                 % visualize_output(x);
             end
-            output(row,:,:,:,:) = generate_simulated_input(); 
+            x = generate_simulated_input();
+            output(row,:,:,:,:) =  x;
             ground_target_coordinates(row,:,:) = target_coordinates;
             ground_target_velocities(row,:,:)=target_velocities;
             row = row+1;
@@ -42,7 +43,7 @@ end
 function position_combinations = get_position_combinations()
     global max_range no_of_targets
     position_grid_size = [10,10];
-    x_positions = (1:position_grid_size(1)-1)/position_grid_size(1)*max_range;
+    x_positions = (-(position_grid_size(1)-1):position_grid_size(1)-1)/position_grid_size(1)*max_range;
     y_positions = (0:position_grid_size(2)-1)/position_grid_size(2)*max_range;
     positions_available = get_possible_pairs(x_positions,y_positions,max_range);
     position_combinations = choosek(positions_available,no_of_targets);
@@ -70,9 +71,15 @@ end
 
 
 function output =  get_possible_pairs(a,b,max_value)
+    
     [A,B] = meshgrid(a,b);
     c=cat(2,A',B');
     output = reshape(c,[],2);
     norm_values = vecnorm(output,2,2);
     output(norm_values>0.9*max_value,:) = [];
+    TF1 = output(:,1)==10;
+    TF2 = output(:,2)==0;
+    TF3 = output(:,1)==0;
+    TF = (TF1 & TF2) | TF3;
+    output(TF,:) = []; 
 end
