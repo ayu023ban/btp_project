@@ -15,6 +15,7 @@ function output = generate_grid_simulated_data()
     output = zeros(no_of_samples,no_of_sensors,Nr,Nd,no_of_channels);
     ground_target_coordinates = zeros(no_of_samples,no_of_targets,3);
     ground_target_velocities = zeros(no_of_samples,no_of_targets,3);
+    size(position_combinations,1)
     row = 1;
     for position_index = 1:size(position_combinations,1)
         % for velocity_index = 1:size(velocity_combinations,1)
@@ -24,14 +25,15 @@ function output = generate_grid_simulated_data()
             % target_velocities(:,3) = 0;
             target_velocities = zeros(no_of_targets,3);
             % target_velocities = [10,0,0];
-            if(row==20)
-                % target_coordinates
-                % x = zeros(no_of_sensors,Nr,Nd,no_of_channels);
-                % x = generate_simulated_input(); 
+            if(row==1200)
+                %target_coordinates
+                %x = zeros(no_of_sensors,Nr,Nd,no_of_channels);
+                %x = generate_simulated_input(); 
                 % x(:,:,:,:) = output(row,:,:,:,:);
-                % visualize_output(x);
+                %visualize_output(x);
             end
             x = generate_simulated_input();
+            %visualize_output(x,target_coordinates);
             output(row,:,:,:,:) =  x;
             ground_target_coordinates(row,:,:) = target_coordinates;
             ground_target_velocities(row,:,:)=target_velocities;
@@ -42,9 +44,9 @@ end
 
 function position_combinations = get_position_combinations()
     global max_range no_of_targets
-    position_grid_size = [10,10];
+    position_grid_size = [5,5];
     x_positions = (-(position_grid_size(1)-1):position_grid_size(1)-1)/position_grid_size(1)*max_range;
-    y_positions = (0:position_grid_size(2)-1)/position_grid_size(2)*max_range;
+    y_positions = (1:position_grid_size(2)-1)/position_grid_size(2)*max_range;
     positions_available = get_possible_pairs(x_positions,y_positions,max_range);
     position_combinations = choosek(positions_available,no_of_targets);
 end
@@ -76,7 +78,9 @@ function output =  get_possible_pairs(a,b,max_value)
     c=cat(2,A',B');
     output = reshape(c,[],2);
     norm_values = vecnorm(output,2,2);
-    output(norm_values>0.9*max_value,:) = [];
+
+    output(norm_values>0.8*max_value,:) = [];
+
     TF1 = output(:,1)==10;
     TF2 = output(:,2)==0;
     TF3 = output(:,1)==0;

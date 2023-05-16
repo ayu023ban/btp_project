@@ -4,7 +4,6 @@ global c max_vel max_range Nd Nr range_res B Tchirp slope fc
 global no_of_targets d no_of_channels snr_db TRRI vel_res 
 global sensors_coordinates sensor_directions target_coordinates target_velocities no_of_sensors
 global data_collection_start_time Ts Fs
-
 %% chip limits
 c = 3e8;
 
@@ -20,6 +19,7 @@ Fs = 20e6;
 Ts = 1/Fs;
 TRRI = 20e-6;
 B = slope*Tchirp;
+B/1e9
 fc= 77e9;             
 
 %carrier freq                                                      
@@ -52,8 +52,8 @@ snr_db = 0;
 
 sensors_coordinates = [0,0,0;10,0,0];
 sensor_directions = [0,1,0;0,1,0];
-target_coordinates = [20,0,0];
-target_velocities = [0,0,0];
+target_coordinates = [-20,-20,0;-5,10,0];
+target_velocities = [10,10,0;-10,20,0];
 no_of_sensors = size(sensors_coordinates,1);
 no_of_targets = size(target_coordinates,1);
 no_of_targets = 1;

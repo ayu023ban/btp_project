@@ -1,26 +1,24 @@
-import os
 import torch
-from torch import nn
 from WholeNetwork import WholeNetwork
 from matplotlib import pyplot as plt
 import time
+start_time = time.time()
 from utils import get_output_path, get_loss, get_energy_of_diff_weight, load_model, save_model
 from visualize import heat_map
 from configuration import no_of_sensors, input_data, sensor_dimension, ground_target_coordinates, ground_target_velocities
-from read_input import get_model_path
 
-start_time = time.time()
+
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-no_of_epochs = 2
+no_of_epochs = 5000
 model = WholeNetwork(no_of_sensors, sensor_dimension).to(device)
 print(model.eval())
 
 input_data = input_data.to(device)
 
 # Adam Optimizer
-learning_rate = 0.1
+learning_rate = 1
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
 # load_model(model, optimizer)
@@ -32,8 +30,11 @@ loss_values = []
 final_output = None
 inputs = None
 count = 0
+counts = []
 print("input length: ", len(input_data))
-sensor_to_plot = 20
+sensor_to_plot = 13
+# idx = torch.randperm(input_data.shape[0])
+# input_data=input_data[idx,:,:,:,:]
 for epoch_number in range(no_of_epochs):
     for sensor_data in input_data[0:len(input_data)]:
         count += 1
@@ -63,19 +64,25 @@ for epoch_number in range(no_of_epochs):
         #     break
         # print("\n")
         # print(loss.grad)
-        loss_values.append(loss.item())
+        
         final_weight_params = model.get_immutable_weights()
         energy_difference_weight = abs(get_energy_of_diff_weight(
             initial_weight_params, final_weight_params).item())
         weight_energy_values.append(energy_difference_weight)
-        if count % 100 == 0:
+        # if count % 5 == 0:
+        loss_values.append(loss.item())
+        counts.append(count)
+        if count %100 == 0:
             print(f"Iteration: {count}, loss: {loss.item()}")
-
 
 # plt.plot(wei)
 # plt.savefig(get_output_path("wei.png"))
 # plt.clf()
-plt.plot(loss_values)
+xi = list(range(len(counts)))
+plt.plot(counts,loss_values)
+plt.xlabel('Number of Iterations')
+plt.ylabel('Loss')
+plt.title('Loss Figure')
 plt.savefig(get_output_path("loss_figure.png"))
 plt.clf()
 # plt.plot(weight_energy_values)
@@ -83,7 +90,7 @@ plt.clf()
 # plt.clf()
 plt.close()
 print(f"Time elapsed: {time.time()-start_time}")
-save_model(model, optimizer)
+# save_model(model, optimizer)
 inputs_cpu = inputs.cpu()
 final_output_cpu = final_output.cpu()
 print(ground_truth)

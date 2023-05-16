@@ -16,7 +16,7 @@ end
 
 function r_v =  get_r_v(target_coordinate,target_velocity,sensor_coordinate)
 r_v = zeros(3,1);
-r_v(1) = floor(sqrt(sum((target_coordinate - sensor_coordinate) .^ 2)));
+r_v(1) = sqrt(sum((target_coordinate - sensor_coordinate) .^ 2));
 R = target_coordinate - sensor_coordinate;
 costheta = max(min(dot(target_velocity,R)/(norm(R)*norm(target_velocity)),1),-1);
 r_v(2) = norm(target_velocity)*costheta;
