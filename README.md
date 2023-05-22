@@ -6,6 +6,8 @@ This work describes Sparsity-Aware Super-Resolved Ranging using Multiple FMCW Ra
 ### 🏠 [Homepage](https://github.com/ayu023ban/btp_project#readme)
 
 
+### [Here is the More Detailed Report on the Topic](https://iitr.ac.in/ayush/BTP_Report.pdf)
+
 ## Prerequisites
 - Matlab
 - Python
