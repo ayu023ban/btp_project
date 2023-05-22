@@ -1,10 +1,7 @@
-import os
 import torch
 from torch import nn
-from CNNModel import CNNModel
 from FeedForwardModel import FeedForwardModel
 import copy
-from utils import get_model_path
 
 
 class WholeNetwork(nn.Module):

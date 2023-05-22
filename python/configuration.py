@@ -1,6 +1,5 @@
 import torch
 from read_input import get_dataset
-import numpy
 
 
 data = get_dataset('training_dataset.mat')

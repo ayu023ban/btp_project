@@ -1,5 +1,5 @@
 %% Generate Simulated Data of Sensors
-% Output is 6D data with following information:
+% Output is 5D data with following information:
 % 1st Index: Index of sample
 % 2nd Index: Sensor Index
 % 3rd Index: Number of samples in one chirp

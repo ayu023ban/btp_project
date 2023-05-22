@@ -3,7 +3,7 @@ from WholeNetwork import WholeNetwork
 from matplotlib import pyplot as plt
 import time
 start_time = time.time()
-from utils import get_output_path, get_loss, get_energy_of_diff_weight, load_model, save_model
+from utils import get_output_path, get_loss, get_energy_of_diff_weight
 from visualize import heat_map
 from configuration import no_of_sensors, input_data, sensor_dimension, ground_target_coordinates, ground_target_velocities
 
@@ -11,7 +11,7 @@ from configuration import no_of_sensors, input_data, sensor_dimension, ground_ta
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
-no_of_epochs = 5000
+no_of_epochs = 2
 model = WholeNetwork(no_of_sensors, sensor_dimension).to(device)
 print(model.eval())
 
@@ -49,7 +49,6 @@ for epoch_number in range(no_of_epochs):
             }
             final_output = outputs
         loss = get_loss(outputs)
-        # loss =
         # print(loss.grad)
         loss.backward()
         # if count % 30 == 0:
@@ -69,7 +68,6 @@ for epoch_number in range(no_of_epochs):
         energy_difference_weight = abs(get_energy_of_diff_weight(
             initial_weight_params, final_weight_params).item())
         weight_energy_values.append(energy_difference_weight)
-        # if count % 5 == 0:
         loss_values.append(loss.item())
         counts.append(count)
         if count %100 == 0:

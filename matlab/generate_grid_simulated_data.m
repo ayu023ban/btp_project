@@ -1,10 +1,13 @@
 %% Generate Simulated Data of Sensors
-% Output is 6D data with following information:
+% Output is 5D data with following information:
 % 1st Index: Index of sample
 % 2nd Index: Sensor Index
 % 3rd Index: Number of samples in one chirp
 % 4th Index: chirps in one sequence
 % 5th Index: Channel Index
+
+% Right now combinations of velocity is commented out to simplify problem
+% And hardcoded velocity to zero
 function output = generate_grid_simulated_data()
     global Nd Nr no_of_channels no_of_sensors target_coordinates target_velocities no_of_targets
     global ground_target_coordinates ground_target_velocities
@@ -25,15 +28,14 @@ function output = generate_grid_simulated_data()
             % target_velocities(:,3) = 0;
             target_velocities = zeros(no_of_targets,3);
             % target_velocities = [10,0,0];
-            if(row==1200)
+            %if(row==1200)
                 %target_coordinates
                 %x = zeros(no_of_sensors,Nr,Nd,no_of_channels);
                 %x = generate_simulated_input(); 
                 % x(:,:,:,:) = output(row,:,:,:,:);
                 %visualize_output(x);
-            end
+            %end
             x = generate_simulated_input();
-            %visualize_output(x,target_coordinates);
             output(row,:,:,:,:) =  x;
             ground_target_coordinates(row,:,:) = target_coordinates;
             ground_target_velocities(row,:,:)=target_velocities;

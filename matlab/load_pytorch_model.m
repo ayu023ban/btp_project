@@ -1,10 +1,13 @@
+% Util Function to Run Python Model from matlab itself. 
+% Set to run both on Windows and Unix based environments 
+% Need to set python virtual environment file path here
 function net = load_pytorch_model(input)
     mydir  = pwd;
     idcs = 0;
     if isunix
         idcs   = strfind(mydir,'/');
     else
-        idcs = strfind(mydir,'\')
+        idcs = strfind(mydir,'\');
     end
     newdir = mydir(1:idcs(end)-1);
     input_file = fullfile(newdir,'dataset',"temp_input");

@@ -11,9 +11,9 @@ set_configuration()
 
 % output = generate_random_simulated_data(10);
 
-output= generate_grid_simulated_data();
+%output= generate_grid_simulated_data();
 %size(output,1)
-%output = generate_simulated_input();
-%visualize_output(output);
-save_output(output,"training_dataset.mat");
+output = generate_simulated_input();
+visualize_output(output);
+%save_output(output,"training_dataset.mat");
 toc

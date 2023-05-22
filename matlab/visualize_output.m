@@ -1,14 +1,13 @@
-function visualize_output(data,target_coordinates)
-global max_vel Nd Nr max_range no_of_sensors no_of_channels range_res vel_res
+function visualize_output(data)
+global  Nd Nr no_of_sensors no_of_channels range_res vel_res target_coordinates
 temp = size(data);
 temp = temp(2:4);
-sensors_count = min(size(data,1),no_of_sensors);
 
 Fr = dftmtx(Nr)/sqrt(Nr);
 Fd = dftmtx(Nd)/sqrt(Nd);
 Fa = dftmtx(no_of_channels)/sqrt(no_of_channels);
 
-for sensor = 2:no_of_sensors
+for sensor = 1:no_of_sensors
     output = zeros(Nr,Nd,no_of_channels);
     output(:,:,:) = data(sensor,:,:,:);
     twodfft_output = zeros(temp);
@@ -47,11 +46,11 @@ for sensor = 2:no_of_sensors
         s = surf(doppler_axis,range_axis,man);
     
         s.EdgeColor = 'none';
-        title(sprintf('3DFFT for channel: %d, %d, %d',channel,target_coordinates(1),target_coordinates(2)));
+        title(sprintf('3DFFT for channel: %d,',channel));
         xlabel('Speed');
         ylabel('Range');
         zlabel('Amplitude');
-        view(2);
+        %view(2);
     
     end
     % legend('coordinates:',target_coordinates)
